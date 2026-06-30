@@ -5,9 +5,7 @@ Configuración de routers y eventos de startup.
 from fastapi import FastAPI
 from app.db import engine, Base
 from app.routers.router_home import router as home_router
-from app.routers.router_razas import router as razas_router
 from app.routers.router_propietarios import router as propietarios_router
-from app.routers.router_mascotas import router as mascotas_router
 
 # Crear la aplicación FastAPI
 app = FastAPI(
@@ -24,9 +22,7 @@ Base.metadata.create_all(bind=engine)
 
 # Registrar routers
 app.include_router(home_router, tags=["Home"])
-app.include_router(razas_router)
 app.include_router(propietarios_router)
-app.include_router(mascotas_router)
 
 
 
