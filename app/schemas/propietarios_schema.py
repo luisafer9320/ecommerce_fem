@@ -1,9 +1,11 @@
 """
 Schemas Pydantic para Propietarios.
 """
-from pydantic import BaseModel, validator, EmailStr
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr, field_validator
+
 
 class PropietarioBase(BaseModel):
     nombre: str
@@ -13,7 +15,8 @@ class PropietarioBase(BaseModel):
     direccion: Optional[str] = None
     is_active: Optional[bool] = True
 
-    @validator('nombre', 'apellido')
+    @field_validator('nombre', 'apellido')
+    @classmethod
     def nombre_no_vacio(cls, v):
         if not v or not v.strip():
             raise ValueError('El campo no puede estar vacío')
@@ -38,5 +41,4 @@ class PropietarioSchema(PropietarioBase):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}

@@ -155,7 +155,3 @@ Este proyecto es un ejemplo de aprendizaje en el **Bootcamp FemCoders Madrid P5*
 MIT
 
 ---
-
-**Autor**: Estudiante FemCoders
-**Bootcamp**: Factoria_F5 - Bootcamp P5
-**Año**: 2026

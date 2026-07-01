@@ -2,10 +2,11 @@
 Módulo de conexión a la base de datos SQLite.
 Usa SQLAlchemy con sesiones sincrónicas.
 """
-from sqlalchemy import create_engine, String
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
 import os
+
 from dotenv import load_dotenv
+from sqlalchemy import create_engine, inspect, text
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 load_dotenv()
 
@@ -27,6 +28,20 @@ SessionLocal = sessionmaker(
 class Base(DeclarativeBase):
     """Base para todos los modelos SQLAlchemy."""
     pass
+
+
+def initialize_db():
+    """Crea las tablas y adapta la base SQLite si detecta un esquema antiguo de mascotas."""
+    if str(engine.url).startswith("sqlite"):
+        inspector = inspect(engine)
+        if inspector.has_table("mascotas"):
+            existing_columns = {column["name"] for column in inspector.get_columns("mascotas")}
+            if "especie" not in existing_columns or "raza" not in existing_columns or "edad" not in existing_columns or "propietario_id" not in existing_columns or "raza_id" in existing_columns:
+                with engine.begin() as connection:
+                    connection.execute(text("DROP TABLE mascotas"))
+
+    Base.metadata.create_all(bind=engine)
+
 
 def get_db():
     """
